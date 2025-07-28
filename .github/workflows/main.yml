@@ -1,0 +1,27 @@
+name: Sync to Hugging Face hub
+on:
+  push:
+    branches: [main]
+  # to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Configure Git
+        run: |
+          git config --global user.email "fernandonmagallanesjr@gmail.com"
+          git config --global user.name "ferds003"
+
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote set-url space https://ferds003:$HF_TOKEN@huggingface.co/spaces/ferds003/DATA103_filipino_spam_detection || \
+          git remote add space https://ferds003:$HF_TOKEN@huggingface.co/spaces/ferds003/DATA103_filipino_spam_detection
+          git push --force-with-lease space main
