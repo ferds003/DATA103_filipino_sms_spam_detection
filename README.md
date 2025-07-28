@@ -3,7 +3,7 @@ title: DATA103_filipino_spam_detection
 emoji: 🚀
 colorFrom: red
 colorTo: purple
-sdk: docker
+sdk: streamlit
 app_port: 8501
 app_file: app.py
 tags:
