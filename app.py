@@ -153,7 +153,7 @@ st.sidebar.markdown(
 
     Acknowledgements:
 
-    The team would like to thank Doc Jet Virtusio for the support and teachings he gave us in our minor class :))
+    The team would like to thank Doc Jet Virtusio for the support and teachings he gave in our minor class :))
 
     """
 )
@@ -1107,7 +1107,7 @@ with ConTAB:
     st.markdown("""
                 ### References: Kindly check them below!
                 
-    For people that will check this project in the future and seek inspiration, we have consolidated below the references we deem helpful for the development of further spam classifications in the filipino context to combat spammers and scammers!       
+    To support future researchers and practitioners exploring spam classification in the Filipino context, we have curated the following references. These resources were instrumental in shaping our approach and may serve as valuable starting points for continued efforts to counter spammers and scammers in the country!      
     
     [Filipino-Spam-SMS-Detection-Model](https://github.com/Yissuh/Filipino-Spam-SMS-Detection-Model/tree/main)
     - A text mining project implemented for Data Analytics course as a third year student in Technological University of the Philippines - Manila. The project focuses on developing a localized spam SMS detection in the Philippines.
