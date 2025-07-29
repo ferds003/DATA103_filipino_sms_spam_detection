@@ -13,7 +13,7 @@ MODEL_PATHS = {
     "Support Vector Machine": "models/svm_model_2.pkl",
     "Random Forest": "models/rf_model_2.pkl",
     "Multinomial Naive Bayes": "models/mNB_model_2.pkl",
-    "Complement Naive Bayes": "models/cnb_model_2.pkl",
+    "Complement Naive Bayes": "models/cNB_model_2.pkl",
 }
 
 
@@ -915,7 +915,7 @@ with ModelEvaluationTAB:
     st.markdown("""
                 
     ### Conclusion: 
-    - The best model that performed well are `rf` and `svm` classifiers with :blue-background [val_accuracy of both 0.95 and test_accuracy of both 0.97]. 
+    - The best model that performed well are `rf` and `svm` classifiers with :blue-background[val_accuracy of 0.95 for both models and test_accuracy of 0.97 for both models too!]. 
     - Assumption for the high accuracy is that these models covered many hyperparameters during training and therefore it was able to find the optimal hyperparameters for the accuracy.
     - Another key metric being checked is the precision and recall for the `ham` class. Due to the dataset having a class imbalance, its performance on recall is vital to determine how it deals with true positives and its classification for the minority class which is the ham messages.
     -This is bad practice but given the scarcity and inability to do sampling techniques properly to combat the imbalance (like SMOTE), we are accepting precision and recall that are similar of value to each other.
@@ -1087,18 +1087,18 @@ with ConTAB:
 
     The project was able to achieve spam classifiers specific to the filipino-context using three datasets that can be a direct tool for assessement for the SIM registration act of 2022.
 
-    This current project was able to do the following unique implementations that stood among the other related projects related to this topic to localize spam classification:
-    - additional EDA insights for the state of the filipino-context messages like plotly graphs and tfidf heatmaps to determine whic
+    This current project was able to do the following unique implementations that stood among the other public projects / references we have checked to localize spam classification:
+    - additional EDA insights for the state of the filipino-context messages like plotly graphs and tfidf heatmaps to determine which words are most common in spam and ham messages
     - train-val-test cross-validation training with hyperparameter tuning directly using the `mlflow` package
     - Considers traditional machine learning classifiers of the two NB variants, SVM, and RF.
-    - demo app available in `HuggingFace Space` for further collaboration and the feedback to target stakeholders which are SIM users.""")
+    - demo app available in `HuggingFace Space` for further collaboration and feedback to target stakeholders and SIM users. """)
 
     st.markdown("""
         ## Recommendations
 
-    Despite the novelty given above, the project can be further improved on these following aspects:
-    - There is a class imbalance by 3x spam than ham class due to sources. Additional data sources to make spam a minority class will significantly improve the evaluation metric particularly on the recall that undermines the true negatives
-    - The use of advanced NLP techniques that consider the whole context of the sprontence like BERT embeddings;
+    Despite the contributions made above, the project can be further improved on these following aspects:
+    - There is a class imbalance by 3x spam than ham class due to sources. Additional data sources to make spam a minority class will significantly improve evaluation metrics particularly on the precision for positive classifications as positive and recall that undermines the true negatives
+    - The use of advanced NLP techniques that consider the whole context of the sentence like BERT embeddings;
     - Tuning the hyperparameters further to greatly scope the potential improvement on evaluation metrics
     - The use of deep learning models and XAI techniques to improve accuracy and transparency or even fine-tune models like DOST-ASTI's roBERTa sentiment analysis that can be used for classification problem
     - conversion of XML data directly from extraction into a data visualization with the use of trained classifiers to map out spam/ham in a timeseries plot. (was hoping to do that! will do it talaga when I have time! -Ferds)
