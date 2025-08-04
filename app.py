@@ -241,7 +241,7 @@ with DemoTAB:
                     )
                     st.plotly_chart(fig1, use_container_width=True)
                     print(
-                        "Top tokens:", explain_df.head()
+                        "Top tokens:", explain_df.head(8)
                     )  ## DEBUGGING LINE; Can be checked on streamlit terminal
                 else:
                     st.warning("Unable to compute token contribution for this model.")
