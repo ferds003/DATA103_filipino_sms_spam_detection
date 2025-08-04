@@ -908,7 +908,7 @@ with TrainingPipelineTAB:
 
     st.markdown("### Example output of run of cell; Check also sample of mflow ui")
     st.code(sample_run, language="python")
-    img1 = Image.open("img/mlflow_ui_1.png")
+    img1 = Image.open("img/mlflow_ui.png")
     st.image(img1, caption="MLFlow UI", use_container_width=True)
 
 
