@@ -5,3 +5,4 @@ scikit-learn>=1.0
 plotly>=5.9.0
 wordcloud>=1.8.1
 Pillow>=8.0.0
+imbalanced-learn>=0.12.4

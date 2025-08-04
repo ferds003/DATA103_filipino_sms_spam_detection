@@ -8,12 +8,15 @@ import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from wordcloud import WordCloud
 from PIL import Image
+from imblearn.pipeline import Pipeline as ImbPipeline
+from imblearn.over_sampling import RandomOverSampler
+
 
 MODEL_PATHS = {
-    "Support Vector Machine": "models/svm_model_2.pkl",
-    "Random Forest": "models/rf_model_2.pkl",
-    "Multinomial Naive Bayes": "models/mNB_model_2.pkl",
-    "Complement Naive Bayes": "models/cNB_model_2.pkl",
+    "Random Forest": "models/rf_model_3.pkl",
+    "Multinomial Naive Bayes": "models/mNB_model_3.pkl",
+    "Support Vector Machine": "models/svm_model_3.pkl",
+    "Complement Naive Bayes": "models/cNB_model_3.pkl",
 }
 
 
@@ -244,6 +247,13 @@ with DemoTAB:
                     st.warning("Unable to compute token contribution for this model.")
         else:
             st.warning("Please input text to classify.")
+    st.markdown("---")
+    st.markdown(""" 
+    ## Changelogs:
+    - Version 2 (August 2, 2025): Improvements across `precision` and `recall` metrics on training by random oversampling ham classes on `X_train` in training pipeline using `imbalanced-learn`package. Latest deployed models trained under these run params.
+    - Version 1 (July 28, 2025): Initial demo of the project with 4 traditional ML classifiers using TFIDF vectorizer.
+    """)
+
 with DataCurationTAB:
     st.markdown(""" 
      Data cleaning and pre-processing is necessary as we are considering three datasets with different contexts. Below is a summary of the data treatment and insights done to make the versions of the dataset.
@@ -898,7 +908,7 @@ with TrainingPipelineTAB:
 
     st.markdown("### Example output of run of cell; Check also sample of mflow ui")
     st.code(sample_run, language="python")
-    img1 = Image.open("img/mlflow_ui.png")
+    img1 = Image.open("img/mlflow_ui_1.png")
     st.image(img1, caption="MLFlow UI", use_container_width=True)
 
 
@@ -910,7 +920,8 @@ with ModelEvaluationTAB:
     With this, presented below is the training summary done under initial run parameters for `preprocessor=tfidf` and `cv_folds=5` for all models considered of the study.
 
     Models considered are the following: `complement_NB (cNB)`, `multinomial_NB (mNB)`, `random_forest (rf)`, `support_vector_machine (svm)`
-                """)
+                
+    REVISION (August 4, 2025): Upon advise, we have done a oversampling of the ham classes. Improvements on `precision` and `recall` is observed in 3rd Run.""")
 
     st.markdown("""
                 
@@ -923,7 +934,7 @@ with ModelEvaluationTAB:
                 """)
 
     st.markdown("---")
-    st.markdown("## 1st Run")
+    st.markdown("## 1st Run (July 28, 2025)")
 
     st.markdown(
         """This run used the default `ngram_range` for the TF-IDF vectorizer, which is `(1, 1)`. This means that only single-word tokens `(unigrams)` were considered during feature extraction."""
@@ -1003,7 +1014,7 @@ with ModelEvaluationTAB:
         st.image(img9, caption="CV Performance", use_container_width=True)
 
     st.markdown("---")
-    st.write("## 2nd Run")
+    st.write("## 2nd Run (July 28, 2025)")
     st.markdown("""
                 For this second run, the  `ngram_range` for the TF-IDF vectorizer was changed, which is now `(1, 2)`. 
                 This means that unigrams from previous run and two-word tokens `(bigrams)` were considered during feature extraction.
@@ -1081,6 +1092,86 @@ with ModelEvaluationTAB:
     with col2:
         st.image(img18, caption="CV Performance", use_container_width=True)
 
+    st.markdown("## 3rd Run (August 4, 2025)")
+    st.markdown("""
+                For this third run, we address the class imbalance by oversampling of the ham class using the `imbalance-learn` package with the aim that ham class is twice that of spam during training in pipeline. 
+                Improvement on `precision` and `recall` is observed overall. The performance metrics are shown below with `random forest` and `complement NB` considered the best models.
+                """)
+
+    st.markdown("""### 3rd_Run Validation Accuracy""")
+    st.markdown("""
+    | models | val_accuracy | precision_0 | recall_0 | f1-score_0 | support | hyper_params | tfidf_range |
+    |---|---|---|---|---|---|---|---|
+    | cNB | 0.96 | 0.86 | 0.84 | 0.85 | {0:95,1:615} | 'classifier__alpha': [0.3, 0.5, 1.0, 1.5] | (1,2) + X_train = {2(ham):spam} |
+    | mNB | 0.95 | 0.75 | 0.91 | 0.83 | {0:95,1:615} | 'classifier__alpha': [0.3, 0.5, 1.0, 1.5] | (1,2) + X_train = {2(ham):spam} |
+    | rf | 0.97 | 0.79 | 0.86 | 0.82 | {0:95,1:615} | 'classifier__n_estimators':[50, 100, 200]<br>'classifier__max_depth':[None, 10, 20]<br>'classifier__min_samples_split':[1,2,5,10] | (1,2) + X_train = {2(ham):spam} |
+    | svm | 0.96 | 0.96 | 0.72 | 0.82 | {0:95,1:615} | 'classifier__C': [0.1, 1, 10]<br>'classifier__kernel': ['linear','rbf'] | (1,2) + X_train = {2(ham):spam} |            
+                
+                """)
+
+    st.markdown("""
+                
+    ### 3rd_Run Test Accuracy
+
+    | models | test_accuracy | precision_0 | recall_0 | f1-score_0 | support | hyper_params | tfidf_range |
+    |---|---|---|---|---|---|---|---|
+    | cNB | 0.89 | 0.89 | 0.86 | 0.87 | {0:125,1:889} | 'classifier__alpha': [0.3, 0.5, 1.0, 1.5] | (1,2) + X_train = {2(ham):spam} |
+    | mNB | 0.95 | 0.76 | 0.91 | 0.83 | {0:125,1:889} | 'classifier__alpha': [0.3, 0.5, 1.0, 1.5] | (1,2) + X_train = {2(ham):spam} |
+    | rf | 0.96 | 0.80 | 0.92 | 0.86 | {0:125,1:889} | 'classifier__n_estimators':[50, 100, 200]<br>'classifier__max_depth':[None, 10, 20]<br>'classifier__min_samples_split':[1,2,5,10] | (1,2) + X_train = {2(ham):spam} |
+    | svm | 0.96 | 0.96 | 0.71 | 0.82 | {0:125,1:889} | 'classifier__C': [0.1, 1, 10]<br>'classifier__kernel': ['linear','rbf'] | (1,2) + X_train = {2(ham):spam} |                
+                """)
+    st.markdown("#### SVM Performance Metrics")
+    img19 = Image.open(
+        "img/3_run/svm/confusion_matrix_svm_05edf44674ee4ffeb25b1284d0a08e83.png"
+    )
+    img20 = Image.open(
+        "img/3_run/svm/cv_performance_05edf44674ee4ffeb25b1284d0a08e83.png"
+    )
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(img19, caption="Confusion Matrix", use_container_width=True)
+    with col2:
+        st.image(img20, caption="CV Performance", use_container_width=True)
+
+    st.markdown("#### RF Performance Metrics")
+    img21 = Image.open(
+        "img/3_run/rf/confusion_matrix_random_forest_498f3ef34e954cdeb074bce4766180af.png"
+    )
+    img22 = Image.open(
+        "img/3_run/rf/cv_performance_498f3ef34e954cdeb074bce4766180af.png"
+    )
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(img21, caption="Confusion Matrix", use_container_width=True)
+    with col2:
+        st.image(img22, caption="CV Performance", use_container_width=True)
+
+    st.markdown("#### Multinomial Naive Bayes Performance Metrics")
+    img23 = Image.open(
+        "img/3_run/mNB/confusion_matrix_multinomialNB_5c755dd20b2c44aa92dff382a9a9073f.png"
+    )
+    img24 = Image.open(
+        "img/3_run/mNB/cv_performance_5c755dd20b2c44aa92dff382a9a9073f.png"
+    )
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(img23, caption="Confusion Matrix", use_container_width=True)
+    with col2:
+        st.image(img24, caption="CV Performance", use_container_width=True)
+
+    st.markdown("#### Complement Naive Bayes Performance Metrics")
+    img25 = Image.open(
+        "img/3_run/cNB/confusion_matrix_complementNB_9497e0a34f76466b8c6ab91aa4ec433e.png"
+    )
+    img26 = Image.open(
+        "img/3_run/cNB/cv_performance_9497e0a34f76466b8c6ab91aa4ec433e.png"
+    )
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(img25, caption="Confusion Matrix", use_container_width=True)
+    with col2:
+        st.image(img26, caption="CV Performance", use_container_width=True)
+
 with ConTAB:
     st.markdown("""
                 ## Conclusion
@@ -1093,6 +1184,7 @@ with ConTAB:
     - Considers traditional machine learning classifiers of the two NB variants, SVM, and RF.
     - demo app available in `HuggingFace Space` for further collaboration and feedback to target stakeholders and SIM users. """)
 
+    st.markdown("---")
     st.markdown("""
         ## Recommendations
 
