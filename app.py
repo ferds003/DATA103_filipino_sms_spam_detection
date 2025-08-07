@@ -256,7 +256,7 @@ with DemoTAB:
 
 with DataCurationTAB:
     st.markdown(""" 
-     Data cleaning and pre-processing is necessary as we are considering three datasets with different contexts. Below is a summary of the data treatment and insights done to make the versions of the dataset.
+     Data cleaning and pre-processing is necessary as we are considering three datasets with different contexts. Below is a summary of the data treatment and insights done to make the versions of the dataset. <mark>We avoided the use of the UCL SMS repository for this project as this does not capture the filipino context.</mark>
 
 - For [Dataset 1](https://www.kaggle.com/datasets/scottleechua/ph-spam-marketing-sms-w-timestamps):
   - drop any null values; drop any full redactions done in `text` column through regex. Drops 74% of the dataset as text sms data is salient to the project.
